@@ -1,4 +1,4 @@
-#include "compute_preparetion.hpp"
+#include "compute_preparation.hpp"
 #include "Vec.hpp"
 #include "integrate.hpp"
 #include "hat.hpp"
