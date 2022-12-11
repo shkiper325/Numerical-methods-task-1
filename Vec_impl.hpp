@@ -61,6 +61,11 @@ T& Vec<T>::operator()(int i) {
 }
 
 template <class T>
+const T& Vec<T>::operator()(int i) const {
+    return data_[i];
+}
+
+template <class T>
 Vec<T> operator+(const Vec<T>& a, const Vec<T>& b) {
     if (a.size_ != b.size_) {
         error(-1, "a.size_ != b.size_ in operator+(Vec, Vec)");

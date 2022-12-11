@@ -15,6 +15,7 @@ public:
 
     int size() const;
     T& operator()(int i);
+    const T& operator()(int i) const;
 
     friend Vec operator+(const Vec&, const Vec&);
     friend Vec operator-(const Vec&, const Vec&);
