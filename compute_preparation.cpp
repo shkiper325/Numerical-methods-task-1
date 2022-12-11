@@ -4,7 +4,7 @@
 #include "hat.hpp"
 #include "error.hpp"
 
-VecD gen_b(int n, int point_count, double(*f)(double)) {
+VecD gen_b(int n, int point_count, std::function<double(double)> f) {
     if (n % 2 == 1) {
         error(-1, "Now can generate b ony for even numbers");
     }
