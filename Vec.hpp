@@ -24,4 +24,6 @@ public:
     T l2_norm() const;
 };
 
+using VecD = Vec<double>;
+
 #endif
