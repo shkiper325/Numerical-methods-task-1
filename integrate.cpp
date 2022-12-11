@@ -1,7 +1,11 @@
+#include <functional>
+
 #include "integrate.hpp"
 #include "error.hpp"
 
-double integrate(double a, double b, int n, double(*f)(double)) {
+using namespace std;
+
+double integrate(double a, double b, int n, function<double(double)> f) {
     if (n < 2) error(-1, "n < 2 in integrate");
 
     double h = (b - a) / (n - 1);
