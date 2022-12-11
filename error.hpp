@@ -6,7 +6,7 @@
 
 template<class T>
 void error(T code, std::string msg) {
-    std::cout << "Error: " << msg << std::endl;
+    std::cerr << "Error: " << msg << std::endl;
     throw code;
 }
 
