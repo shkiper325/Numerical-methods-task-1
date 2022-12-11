@@ -84,3 +84,8 @@ function<double(double)> small_hat(int i, int n) {
         else return -pow(2. * static_cast<double>(n) * (x - (static_cast<double>(i) + 0.5) / n), 2) + 1.;
     };
 }
+
+function<double(double)> gen_hat(int i, int n) {
+    if (i % 2 == 0) return big_hat(i / 2, n);
+    else return small_hat(i / 2, n);
+}
