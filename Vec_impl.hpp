@@ -2,6 +2,7 @@
 #define VEC_IMPL_HPP
 
 #include <cmath>
+#include <cstring>
 
 #include "Vec.hpp"
 #include "error.hpp"
@@ -35,7 +36,7 @@ Vec<T>::Vec(int n, T* fill) : size_(n) {
 
 template <class T>
 Vec<T>::Vec(const Vec& other) : size_(other.size_){
-    data_ = new T[n];
+    data_ = new T[size_];
 
     memcpy(data_, other.data_, size_ * sizeof(T));
 }
@@ -45,7 +46,7 @@ Vec<T>& Vec<T>::operator=(const Vec& other) {
     size_ = other.size_;
 
     delete [] data_;
-    data_ = new T[n];
+    data_ = new T[size_];
 
     memcpy(data_, other.data_, size_ * sizeof(T));
 }
@@ -126,7 +127,7 @@ T Vec<T>::l2_norm() const {
     T ret = 0;
 
     for(int i = 0; i < size_; ++i) {
-        ret += data_[i] * data[i];
+        ret += data_[i] * data_[i];
     }
 
     return std::sqrt(ret);

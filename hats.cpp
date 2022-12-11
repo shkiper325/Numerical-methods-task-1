@@ -63,6 +63,9 @@ double gen_hats_scalar_product(int i, int pos, int n) {
             error(-1, "bad pos given in get_hat");
         }
     }
+
+    error(-1, "reached end of gen_hats_scalar_product");
+    exit(-1);
 }
 
 function<double(double)> big_hat(int i, int n) {

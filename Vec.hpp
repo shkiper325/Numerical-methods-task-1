@@ -17,13 +17,19 @@ public:
     T& operator()(int i);
     const T& operator()(int i) const;
 
-    friend Vec operator+(const Vec&, const Vec&);
-    friend Vec operator-(const Vec&, const Vec&);
-    friend T operator*(const Vec&, const Vec&);
-    friend Vec operator*(const T&, const Vec&);
+    template<class K>
+    friend Vec<K> operator+(const Vec<K>&, const Vec<K>&);
+    template<class K>
+    friend Vec<K> operator-(const Vec<K>&, const Vec<K>&);
+    template<class K>
+    friend K operator*(const Vec<K>&, const Vec<K>&);
+    template<class K>
+    friend Vec<K> operator*(const K&, const Vec<K>&);
 
     T l2_norm() const;
 };
+
+#include "Vec_impl.hpp"
 
 using VecD = Vec<double>;
 
