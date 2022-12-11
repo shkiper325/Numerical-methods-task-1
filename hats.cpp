@@ -1,8 +1,15 @@
+#include <functional>
+#include <algorithm>
+
+#include <cmath>
+
 #include "Vec.hpp"
 #include "error.hpp"
 #include "hat.hpp"
 
-double gen_hat(int i, int pos, int n) {
+using namespace std;
+
+double gen_hats_scalar_product(int i, int pos, int n) {
     if (n % 2 == 1) {
         error(-1, "Now can generate hats ony for even numbers");
     }
@@ -56,4 +63,24 @@ double gen_hat(int i, int pos, int n) {
             error(-1, "bad pos given in get_hat");
         }
     }
+}
+
+function<double(double)> big_hat(int i, int n) {
+    return [n = move(n), i = move(i)](double x) -> double {
+        double left = max(0., static_cast<double>(i - 1) / n);
+        double right = min(1., static_cast<double>(i + 1) / n);
+
+        if (x < left || x > right) return 0;
+        else return -pow(static_cast<double>(n) * (x - static_cast<double>(i) / n), 2) + 1.;
+    };
+}
+
+function<double(double)> small_hat(int i, int n) {
+    return [n = move(n), i = move(i)](double x) -> double {
+        double left = max(0., static_cast<double>(i) / n);
+        double right = min(1., static_cast<double>(i + 1) / n);
+
+        if (x < left || x > right) return 0;
+        else return -pow(2. * static_cast<double>(n) * (x - (static_cast<double>(i) + 0.5) / n), 2) + 1.;
+    };
 }
