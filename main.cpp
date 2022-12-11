@@ -15,7 +15,7 @@ void test_gen_b(int n) {
 }
 
 int main() {
-    test_gen_b(5);
+    test_gen_b(6);
 
     return 0;
 }
