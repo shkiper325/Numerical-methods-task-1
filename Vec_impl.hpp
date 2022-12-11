@@ -4,17 +4,18 @@
 #include <cmath>
 
 #include "Vec.hpp"
+#include "error.hpp"
 
 template <class T>
 Vec<T>::Vec(int n) : size_(n) {
-    if (n <= 0) throw -1;
+    if (n <= 0) error(-1, "n <= 0 in Vec(int) constructor");
 
     data_ = new T[n];
 }
 
 template <class T>
 Vec<T>::Vec(int n, T fill) : size_(n) {
-    if (n <= 0) throw -1;
+    if (n <= 0) error(-1, "n <= 0 in Vec(int, T) constructor");
 
     data_ = new T[n];
 
@@ -25,7 +26,7 @@ Vec<T>::Vec(int n, T fill) : size_(n) {
 
 template <class T>
 Vec<T>::Vec(int n, T* fill) : size_(n) {
-    if (n <= 0) throw -1;
+    if (n <= 0) error(-1, "n <= 0 in Vec(int, T*) constructor");
 
     data_ = new T[n];
 
@@ -62,7 +63,7 @@ T& Vec<T>::operator()(int i) {
 template <class T>
 Vec<T> operator+(const Vec<T>& a, const Vec<T>& b) {
     if (a.size_ != b.size_) {
-        throw -1;
+        error(-1, "a.size_ != b.size_ in operator+(Vec, Vec)");
     }
 
     Vec<T> ret(a.size_);
@@ -77,7 +78,7 @@ Vec<T> operator+(const Vec<T>& a, const Vec<T>& b) {
 template <class T>
 Vec<T> operator-(const Vec<T>& a, const Vec<T>& b) {
     if (a.size_ != b.size_) {
-        throw -1;
+        error(-1, "a.size_ != b.size_ in operator-(Vec, Vec)");
     }
 
     Vec<T> ret(a.size_);
@@ -92,7 +93,7 @@ Vec<T> operator-(const Vec<T>& a, const Vec<T>& b) {
 template <class T>
 T operator*(const Vec<T>& a, const Vec<T>& b) {
     if (a.size_ != b.size_) {
-        throw -1;
+        error(-1, "a.size_ != b.size_ in operator*(Vec, Vec)");
     }
 
     T ret = 0;
@@ -105,7 +106,7 @@ T operator*(const Vec<T>& a, const Vec<T>& b) {
 }
 
 template <class T>
-Vec<T> operator*(T& a, const Vec<T>& b) {
+Vec<T> operator*(const T& a, const Vec<T>& b) {
     Vec<T> ret(b.size_);
 
     for(int i = 0; i < a.size_; ++i) {
