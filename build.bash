@@ -1,3 +1,3 @@
 #!/bin/bash
 
-g++ *.cpp -o main
+g++ *.cpp -O3 -o main
