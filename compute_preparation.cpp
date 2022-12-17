@@ -4,7 +4,7 @@
 #include "hat.hpp"
 #include "error.hpp"
 
-VecD gen_b(int n, int point_count, std::function<double(double)> f) { //ALARM! разные границы для разных шапочек для асимптотики
+VecD gen_f(int n, int point_count, std::function<double(double)> f) { //ALARM! разные границы для разных шапочек для асимптотики
     if (n % 2 == 1) {
         error(-1, "Now can generate b ony for even numbers");
     }

@@ -5,6 +5,6 @@
 
 #include "Vec.hpp"
 
-VecD gen_b(int n, int point_count, std::function<double(double)> f);
+VecD gen_f(int n, int point_count, std::function<double(double)> f);
 
 #endif

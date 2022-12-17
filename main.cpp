@@ -13,12 +13,12 @@ void test_integrate() {
     printf("x^3: %9.3lf\n", integrate(0, 0.5, 100, [](double x) -> double {return x * x * x;}));
 }
 
-void test_gen_b(int n, double x) {
+void test_gen_f(int n, double x) {
     auto f = [](double x) -> double {
         return x * x;
     };
 
-    auto b = gen_b(n, 100, f);
+    auto b = gen_f(n, 100, f);
 
     // printf("\n");
     // for(int i = 0; i < 2 * n + 1; ++i) {
@@ -36,7 +36,7 @@ void test_gen_b(int n, double x) {
 }
 
 int main() {
-    test_gen_b(6, 0.5);
+    test_gen_f(100, 0.5);
 
     test_integrate();
 
