@@ -4,47 +4,36 @@
 #include "hat.hpp"
 #include "error.hpp"
 
-VecD gen_b(int n, int point_count, std::function<double(double)> f) {
+VecD gen_b(int n, int point_count, std::function<double(double)> f) { //ALARM! разные границы для разных шапочек для асимптотики
     if (n % 2 == 1) {
         error(-1, "Now can generate b ony for even numbers");
     }
 
     VecD ret(2 * n + 1);
+
+    // printf("\n");
     
-    for(int j = 0; j < n; ++j) {
-        auto hat = small_hat(j, n);
+    for(int i = 0; i < 2 * n + 1; ++i) {
+        auto hat = gen_hat(i, n);
         auto multilpied = [hat = hat, f = f](double x) -> double {
             return hat(x) * f(x);
         };
 
-        ret(2 * j /**/+ 1) = integrate(static_cast<double>(j) / n, static_cast<double>(j + 1) / n, point_count, multilpied);
-    }
+        double a = static_cast<double>(i / 2 - 1) / n + (i % 2 == 0 ? 0. : 1. / n);
+        double b = static_cast<double>(i / 2 + 1) / n;
 
-    for (int j = 1; j < n; ++j) {
-        auto hat = big_hat(j, n);
-        auto multilpied = [hat = hat, f = f](double x) -> double {
-            return hat(x) * f(x);
-        };
+        // printf("left border: %9.3lf, right border: %9.3lf\n", a, b);
+        // printf("values in [a, b]: %9.3lf %9.3lf %9.3lf %9.3lf %9.3lf\n",
+        //        multilpied(a),
+        //        multilpied(a + (b - a) / 4),
+        //        multilpied(a + (b - a) / 2),
+        //        multilpied(a + 3 * (b - a) / 4),
+        //        multilpied(b)
+        // );
 
-        ret(2 * j - 1 /**/ + 1) = integrate(static_cast<double>(j - 1) / n, static_cast<double>(j + 1) / n, point_count, multilpied);
-    }
+        // printf("integrated: %9.3lf\n", integrate(a, b, point_count, multilpied));
 
-    {
-        auto hat = big_hat(0, n);
-        auto multilpied = [hat = hat, f = f](double x) -> double {
-            return hat(x) * f(x);
-        };
-
-        ret(0) = integrate(0.0, 1. / n, point_count, hat);
-    }
-
-    {
-        auto hat = big_hat(n, n);
-        auto multilpied = [hat = hat, f = f](double x) -> double {
-            return hat(x) * f(x);
-        };
-
-        ret(2 * n) = integrate(1. - 1. / n, 1., point_count, hat);
+        ret(i) = integrate(a, b, point_count, multilpied);
     }
     
     return ret;
