@@ -41,7 +41,7 @@ void test() {
     test_gen_f(100, 0.5);
 }
 
-void main_routine(int K, int I) {
+void main_routine(int K, int I, double min_val, double max_val) {
 
     // Определения
 
@@ -92,10 +92,47 @@ void main_routine(int K, int I) {
 
         printf("%9.3lf: %9.3lf\n", x, ret(pos));
     }
+
+    // Запись в файл
+
+    // xs
+
+    auto fd = fopen("points.json", "w");
+
+    fprintf(fd, "{\"x\" : [\n");
+
+    for(int pos = 0; pos < solution_point_count; ++pos) {
+        double x = static_cast<double>(pos) / (solution_point_count - 1);
+
+        if (pos == solution_point_count - 1) {
+            fprintf(fd, "    %9.3lf\n", x);
+        } else {
+            fprintf(fd, "    %9.3lf,\n", x);
+        }
+    }
+
+    fprintf(fd, "],\n");
+
+    // ys
+
+    fprintf(fd, "\"y\" : [\n");
+
+    for(int pos = 0; pos < solution_point_count; ++pos) {
+        if (pos == solution_point_count - 1) {
+            fprintf(fd, "    %9.3lf\n", ret(pos));
+        } else {
+            fprintf(fd, "    %9.3lf,\n", ret(pos));
+        }
+    }
+
+    fprintf(fd, "]}\n");
+
+    fclose(fd);
+
 }
 
 int main() {
-    main_routine(1000, 100);
+    main_routine(10, 10, 10, 10);
 
     return 0;
 }
