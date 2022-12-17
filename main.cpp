@@ -1,9 +1,13 @@
-#include <cstdio>
+#include <iostream>
+
+#include <cstdio> 
 
 #include "compute_preparation.hpp"
 #include "integrate.hpp"
 #include "hat.hpp"
 #include "computations.hpp"
+
+using namespace std;
 
 void test_integrate() {
     printf("\nintegrate() test:\n");
@@ -55,6 +59,8 @@ void main_routine(int K, int I, double min_val, double max_val) {
 
     // Вычисления
 
+    cout << "Инициализация" << endl;
+
     auto a = gen_a(n);
     auto b = gen_b(n);
     auto c = gen_c(n);
@@ -62,6 +68,8 @@ void main_routine(int K, int I, double min_val, double max_val) {
     auto e = gen_e(n);
 
     auto f = gen_f(n, integrate_point_count, function);
+
+    cout << "Решение системы..." << endl;
 
     auto solution = solve_penta(a, b, c, d, e, f, n);
 
@@ -72,6 +80,8 @@ void main_routine(int K, int I, double min_val, double max_val) {
 
     // Обработка
 
+    cout << "Подготовка выходного вектора..." << endl;
+
     VecD ret(solution_point_count, 0.);
     for(int pos = 0; pos < solution_point_count; ++pos) {
         double x = static_cast<double>(pos) / (solution_point_count - 1);
@@ -80,20 +90,22 @@ void main_routine(int K, int I, double min_val, double max_val) {
             double a = static_cast<double>(i / 2 - 1) / n + (i % 2 == 0 ? 0. : 1. / n);
             double b = static_cast<double>(i / 2 + 1) / n;
 
-            double norm = integrate(a, b, solution_integrate_point_count, gen_hat(i, n));
+            double norm = 1; // integrate(a, b, solution_integrate_point_count, gen_hat(i, n));
             ret(pos) += solution(i) * gen_hat(i, n)(x) / norm;
         }
     }
 
-    // Вывод
+    // // Вывод
     
-    for(int pos = 0; pos < solution_point_count; ++pos) {
-        double x = static_cast<double>(pos) / (solution_point_count - 1);
+    // for(int pos = 0; pos < solution_point_count; ++pos) {
+    //     double x = static_cast<double>(pos) / (solution_point_count - 1);
 
-        printf("%9.3lf: %9.3lf\n", x, ret(pos));
-    }
+    //     printf("%9.3lf: %9.3lf\n", x, ret(pos));
+    // }
 
     // Запись в файл
+
+    cout << "Запись в points.json" << endl;
 
     // xs
 
@@ -105,9 +117,9 @@ void main_routine(int K, int I, double min_val, double max_val) {
         double x = static_cast<double>(pos) / (solution_point_count - 1);
 
         if (pos == solution_point_count - 1) {
-            fprintf(fd, "    %9.3lf\n", x);
+            fprintf(fd, "    %9.6lf\n", x);
         } else {
-            fprintf(fd, "    %9.3lf,\n", x);
+            fprintf(fd, "    %9.6lf,\n", x);
         }
     }
 
@@ -119,9 +131,9 @@ void main_routine(int K, int I, double min_val, double max_val) {
 
     for(int pos = 0; pos < solution_point_count; ++pos) {
         if (pos == solution_point_count - 1) {
-            fprintf(fd, "    %9.3lf\n", ret(pos));
+            fprintf(fd, "    %9.3lf\n", min(max(ret(pos), min_val), max_val));
         } else {
-            fprintf(fd, "    %9.3lf,\n", ret(pos));
+            fprintf(fd, "    %9.3lf,\n", min(max(ret(pos), min_val), max_val));
         }
     }
 
@@ -129,10 +141,11 @@ void main_routine(int K, int I, double min_val, double max_val) {
 
     fclose(fd);
 
+    cout << "Готово!" << endl;
 }
 
-int main() {
-    main_routine(10, 10, 10, 10);
+int main(int argc, char* argv[]) {
+    main_routine(stoi(argv[1]), stoi(argv[2]), -0.001, 0.001);
 
     return 0;
 }
