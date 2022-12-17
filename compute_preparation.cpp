@@ -38,3 +38,53 @@ VecD gen_f(int n, int point_count, std::function<double(double)> f) { //ALARM! Ñ
     
     return ret;
 }
+
+VecD gen_e(int n) {
+    VecD ret(2 * n + 1, 0.);
+
+    for (int i = 2; i < 2 * n + 1; ++i) {
+        ret(i) = gen_hats_scalar_product(i, -2, n);
+    }
+
+    return ret;
+}
+
+VecD gen_c(int n) {
+    VecD ret(2 * n + 1, 0.);
+
+    for (int i = 1; i < 2 * n + 1; ++i) {
+        ret(i) = gen_hats_scalar_product(i, -1, n);
+    }
+
+    return ret;
+}
+
+VecD gen_d(int n) {
+    VecD ret(2 * n + 1, 0.);
+
+    for (int i = 0; i < 2 * n + 1; ++i) {
+        ret(i) = gen_hats_scalar_product(i, 0, n);
+    }
+
+    return ret;
+}
+
+VecD gen_a(int n) {
+    VecD ret(2 * n + 1, 0.);
+
+    for (int i = 0; i < 2 * n; ++i) {
+        ret(i) = gen_hats_scalar_product(i, 1, n);
+    }
+
+    return ret;
+}
+
+VecD gen_b(int n) {
+    VecD ret(2 * n + 1, 0.);
+
+    for (int i = 0; i < 2 * n - 1; ++i) {
+        ret(i) = gen_hats_scalar_product(i, 2, n);
+    }
+
+    return ret;
+}
