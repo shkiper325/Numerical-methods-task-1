@@ -69,7 +69,7 @@ double gen_hats_scalar_product(int i, int pos, int n) {
 }
 
 function<double(double)> big_hat(int i, int n) {
-    return [n = move(n), i = move(i)](double x) -> double {
+    return [n = n, i = i](double x) -> double {
         double left = max(0., static_cast<double>(i - 1) / n);
         double right = min(1., static_cast<double>(i + 1) / n);
 
@@ -79,7 +79,7 @@ function<double(double)> big_hat(int i, int n) {
 }
 
 function<double(double)> small_hat(int i, int n) {
-    return [n = move(n), i = move(i)](double x) -> double {
+    return [n = n, i = i](double x) -> double {
         double left = max(0., static_cast<double>(i) / n);
         double right = min(1., static_cast<double>(i + 1) / n);
 
