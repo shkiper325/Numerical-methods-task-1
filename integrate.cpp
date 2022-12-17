@@ -12,7 +12,7 @@ double integrate(double a, double b, int n, function<double(double)> f) {
 
     double result = 0;
     for(int i = 0; i < (n - 1); ++i) {
-        double x = h * (static_cast<double>(i) + 0.5);
+        double x = a + h * (static_cast<double>(i) + 0.5);
 
         double val = f(x);
         result += val * h;
