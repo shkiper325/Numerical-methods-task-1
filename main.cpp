@@ -40,11 +40,39 @@ void test_gen_f(int n, double x) {
     printf("\nval: %9.6lf\n", val);
 }
 
+void test_solve_penta() {
+    double arr_a[] = {  2,  6, 11, 16, 21, 26,  0};
+    VecD a(7, arr_a);
+
+    double arr_b[] = {  3,  7, 12, 17, 22,  0,  0};
+    VecD b(7, arr_b);
+
+    double arr_c[] = {  0,  4,  9, 14, 19, 24, 28};
+    VecD c(7, arr_c);
+
+    double arr_d[] = {  1,  5, 10, 15, 20, 25, 29};
+    VecD d(7, arr_d);
+
+    double arr_e[] = {  0,  0,  8, 13, 18, 23, 27};
+    VecD e(7, arr_e);
+
+    double arr_f[] = { -5, -6, -7, -8, -9,-10,-11};
+    VecD f(7, arr_f);
+
+    auto solution = solve_penta(a, b, c, d, e, f, 7);
+
+    printf("\nSolution for pentadiagional system:\n");
+    for(int i = 0; i < 7; ++i) {
+        printf(" %9.6e\n", solution(i));
+    }
+}
+
+
 void test() {
     test_integrate();
     test_gen_f(100, 0.5);
+    test_solve_penta();
 }
-
 void main_routine(int K, int I, double min_val, double max_val) {
 
     // Определения
@@ -55,7 +83,7 @@ void main_routine(int K, int I, double min_val, double max_val) {
     int n = K;
     const int solution_point_count = K;
     
-    auto function = [](double x) -> double {return x;};
+    auto function = [](double) -> double {return 1;};
 
     // Вычисления
 
@@ -68,6 +96,35 @@ void main_routine(int K, int I, double min_val, double max_val) {
     auto e = gen_e(n);
 
     auto f = gen_f(n, integrate_point_count, function);
+
+    cout << "Запись системы в файл..." << endl;
+
+    auto fd = fopen("A.txt", "w");
+
+    for (int i = 0; i < 2 * n + 1; ++i) {
+        for (int j = 0; j < 2 * n + 1; ++j) {
+            double val;
+
+            if (i == j + 2) val = e(i);
+            else if (i == j + 1) val = c(i);
+            else if (i == j) val = d(i);
+            else if (i == j - 1) val = a(i);
+            else if (i == j - 2) val = b(i);
+            else val = 0;
+ 
+            fprintf(fd, "%18.12e\n", val);
+        }
+    }
+
+    fclose(fd);
+
+    fd = fopen("b.txt", "w");
+
+    for (int i = 0; i < 2 * n + 1; ++i) {
+        fprintf(fd, "%12.6e\n", f(i));
+    }
+
+    fclose(fd);
 
     cout << "Решение системы..." << endl;
 
@@ -109,7 +166,7 @@ void main_routine(int K, int I, double min_val, double max_val) {
 
     // xs
 
-    auto fd = fopen("points.json", "w");
+    fd = fopen("points.json", "w");
 
     fprintf(fd, "{\"x\" : [\n");
 
@@ -131,9 +188,9 @@ void main_routine(int K, int I, double min_val, double max_val) {
 
     for(int pos = 0; pos < solution_point_count; ++pos) {
         if (pos == solution_point_count - 1) {
-            fprintf(fd, "    %9.3lf\n", min(max(ret(pos), min_val), max_val));
+            fprintf(fd, "    %9.6lf\n", min(max(ret(pos), min_val), max_val));
         } else {
-            fprintf(fd, "    %9.3lf,\n", min(max(ret(pos), min_val), max_val));
+            fprintf(fd, "    %9.6lf,\n", min(max(ret(pos), min_val), max_val));
         }
     }
 
@@ -145,7 +202,8 @@ void main_routine(int K, int I, double min_val, double max_val) {
 }
 
 int main(int argc, char* argv[]) {
-    main_routine(stoi(argv[1]), stoi(argv[2]), -0.001, 0.001);
+    main_routine(stoi(argv[1]), stoi(argv[2]), -1, 1);
+    // test();
 
     return 0;
 }
