@@ -3,7 +3,7 @@
 import numpy as np
 import json
 
-N = 100
+N = 20
 
 TO_BE_PRINTED = False
 
@@ -40,8 +40,8 @@ def main():
 
     A[-1] = np.zeros(shape=(2 * N + 1,))
     A[0] = np.zeros(shape=(2 * N + 1,))
-    A[-1, -1] = 1 #A[-2, -2]
-    A[0, 0] = 1 #A[1, 1]
+    A[-1, -1] = 1
+    A[0, 0] = 1
 
     fd = open('b.txt', 'r')
     b = np.array(list(map(np.double, fd.read().split('\n')[:-1])))
