@@ -1,6 +1,7 @@
 #include <iostream>
 
-#include <cstdio> 
+#include <cstdio>
+#include <cmath> 
 
 #include "compute_preparation.hpp"
 #include "integrate.hpp"
@@ -8,6 +9,8 @@
 #include "computations.hpp"
 
 using namespace std;
+
+const double PI = 3.1416;
 
 void test_integrate() {
     printf("\nintegrate() test:\n");
@@ -20,7 +23,7 @@ void test_integrate() {
 
 void test_gen_f(int n, double x) {
     auto f = [](double x) -> double {
-        return x * x;
+        return x;
     };
 
     auto b = gen_f(n, 100, f);
@@ -73,6 +76,7 @@ void test() {
     test_gen_f(100, 0.5);
     test_solve_penta();
 }
+
 void main_routine(int K, int I, double min_val, double max_val) {
 
     // Определения
@@ -83,7 +87,7 @@ void main_routine(int K, int I, double min_val, double max_val) {
     int n = K;
     const int solution_point_count = K;
     
-    auto function = [](double) -> double {return 1;};
+    auto function = [](double x) -> double {return x;};
 
     // Вычисления
 
