@@ -70,13 +70,6 @@ void test_solve_penta() {
     }
 }
 
-
-void test() {
-    test_integrate();
-    test_gen_f(100, 0.5);
-    test_solve_penta();
-}
-
 void main_routine(int K, int I, double min_val, double max_val) {
 
     // Определения
@@ -151,7 +144,7 @@ void main_routine(int K, int I, double min_val, double max_val) {
             double a = static_cast<double>(i / 2 - 1) / n + (i % 2 == 0 ? 0. : 1. / n);
             double b = static_cast<double>(i / 2 + 1) / n;
 
-            double norm = 1; // integrate(a, b, solution_integrate_point_count, gen_hat(i, n));
+            double norm = integrate(a, b, solution_integrate_point_count, gen_hat(i, n));
             ret(pos) += solution(i) * gen_hat(i, n)(x) / norm;
         }
     }
@@ -206,8 +199,7 @@ void main_routine(int K, int I, double min_val, double max_val) {
 }
 
 int main(int argc, char* argv[]) {
-    main_routine(stoi(argv[1]), stoi(argv[2]), -1, 1);
-    // test();
+    // main_routine(stoi(argv[1]), stoi(argv[2]), -1, 1);
 
     return 0;
 }
