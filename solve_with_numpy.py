@@ -3,9 +3,9 @@
 import numpy as np
 import json
 
-N = 20
+N = 10
 
-TO_BE_PRINTED = False
+TO_BE_PRINTED = True
 
 def fat_hat(i, n, x):
     left = max(0, (i - 1) / n)
@@ -25,13 +25,14 @@ def small_hat(i, n, x):
     else:
         return -(2 * n * (x - (i + 0.5) / n)) ** 2 + 1
 
-def check(vals):
-    h = 1 / (N - 1)
+def eval_result(x, sol):
+    val = 0
+    for j in range(N + 1):
+        val += fat_hat(j, N, x) * sol[2 * j]
+    for j in range(N):
+        val += small_hat(j, N, x) * sol[2 * j + 1]
 
-    C_dist = 0
-    for i in range(1, N - 1):
-        d1 = (vals[i - 1] - 2 * vals[i] + vals[i + 1]) / h / h
-
+    return val
 
 def main():
     fd = open('A.txt', 'r')
@@ -63,14 +64,10 @@ def main():
     for i in range(N):
         x = i / (N - 1)
 
-        val = 0
-        for j in range(N + 1):
-            val += fat_hat(j, N, x) * sol[2 * j]
-            if j != N:
-                val += small_hat(j, N, x) * sol[2 * j + 1]
-        
-        result.append(val)
+        result.append(eval_result(x, sol))
 
+    print('Solution in 1/2:', eval_result(0.5, sol))
+    print('Solution in 3/4:', eval_result(0.75, sol))
 
     json_to_write = json.dumps({
         'x' : [i / (N - 1) for i in range(N)],
