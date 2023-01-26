@@ -22,6 +22,9 @@ VecD gen_f(int n, int point_count, std::function<double(double)> f) { //ALARM! Ñ
         double a = static_cast<double>(i / 2 - 1) / n + (i % 2 == 0 ? 0. : 1. / n);
         double b = static_cast<double>(i / 2 + 1) / n;
 
+        // double a = 0;
+        // double b = 1;
+
         // printf("left border: %9.3lf, right border: %9.3lf\n", a, b);
         // printf("values in [a, b]: %9.3lf %9.3lf %9.3lf %9.3lf %9.3lf\n",
         //        multilpied(a),
