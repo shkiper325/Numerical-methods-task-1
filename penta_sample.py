@@ -18,7 +18,11 @@ def main():
     
     x = np.linalg.solve(A, b)
 
-    print(x)
+    print('Solution:', x)
+    
+    print('det:', np.linalg.det(A))
+
+    print('Condition number:', np.linalg.cond(A))
 
 if __name__ == '__main__':
     main()
