@@ -62,6 +62,7 @@ void test_solve_penta() {
     double arr_f[] = { -5, -6, -7, -8, -9,-10,-11};
     VecD f(7, arr_f);
 
+    printf("Solving...\n");
     auto solution = solve_penta(a, b, c, d, e, f, 7);
 
     printf("\nSolution for pentadiagional system:\n");
@@ -199,6 +200,7 @@ void main_routine(int K, int I, double min_val, double max_val) {
 }
 
 int main(int argc, char* argv[]) {
+    test_solve_penta();
     // main_routine(stoi(argv[1]), stoi(argv[2]), -1, 1);
 
     return 0;
