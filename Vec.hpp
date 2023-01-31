@@ -27,6 +27,8 @@ public:
     friend Vec<K> operator*(const K&, const Vec<K>&);
 
     T l2_norm() const;
+
+    void print() const;
 };
 
 #include "Vec_impl.hpp"

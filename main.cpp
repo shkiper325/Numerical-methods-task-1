@@ -5,8 +5,8 @@
 
 #include "compute_preparation.hpp"
 #include "integrate.hpp"
-#include "hat.hpp"
-#include "computations.hpp"
+#include "hats.hpp"
+#include "penta.hpp"
 
 using namespace std;
 
@@ -36,7 +36,8 @@ void test_gen_f(int n, double x) {
     double val = 0;
 
     for(int i = 0; i < 2 * n + 1; ++i) {
-        double norm = integrate(static_cast<double>(i / 2 - 1) / n, static_cast<double>(i / 2 + 1) / n, 100, gen_hat(i, n));
+        double norm = get_norm(i, n);
+        cout << norm << endl;
         val += b(i) * gen_hat(i, n)(x) / norm;
     }
 
@@ -44,19 +45,19 @@ void test_gen_f(int n, double x) {
 }
 
 void test_solve_penta() {
-    double arr_a[] = {  2,  6, 11, 16, 21, 26,  0};
+    double arr_a[] = {  2,  4, -1, -5, -2,  2,  0};
     VecD a(7, arr_a);
 
-    double arr_b[] = {  3,  7, 12, 17, 22,  0,  0};
+    double arr_b[] = {  3,  7,  2,  1, -4,  0,  0};
     VecD b(7, arr_b);
 
-    double arr_c[] = {  0,  4,  9, 14, 19, 24, 28};
+    double arr_c[] = {  0,  4,  2, -1,  2,  1,  1};
     VecD c(7, arr_c);
 
-    double arr_d[] = {  1,  5, 10, 15, 20, 25, 29};
+    double arr_d[] = {  1,  5,  3, -4,  3,  0,  3};
     VecD d(7, arr_d);
 
-    double arr_e[] = {  0,  0,  8, 13, 18, 23, 27};
+    double arr_e[] = {  0,  0, -1,  0,  1,  1,  2};
     VecD e(7, arr_e);
 
     double arr_f[] = { -5, -6, -7, -8, -9,-10,-11};
@@ -67,8 +68,20 @@ void test_solve_penta() {
 
     printf("\nSolution for pentadiagional system:\n");
     for(int i = 0; i < 7; ++i) {
-        printf(" %9.6e\n", solution(i));
+        printf(" %9.6lf\n", solution(i));
     }
+}
+
+void dump_vec(VecD vec, string path) {
+    auto fd = fopen(path.c_str(), "w");
+    auto m = vec.size();
+    cout << m << endl;
+
+    for (int i = 0; i < m; ++i) {
+        fprintf(fd, "%18.12lf\n", vec(i));
+    }
+
+    fclose(fd);
 }
 
 void main_routine(int K, int I, double min_val, double max_val) {
@@ -81,7 +94,7 @@ void main_routine(int K, int I, double min_val, double max_val) {
     int n = K;
     const int solution_point_count = K;
     
-    auto function = [](double x) -> double {return x;};
+    auto function = [](double x) -> double {return sin(5 * x) * exp(x);}; 
 
     // Вычисления
 
@@ -95,7 +108,7 @@ void main_routine(int K, int I, double min_val, double max_val) {
 
     auto f = gen_f(n, integrate_point_count, function);
 
-    cout << "Запись системы в файл..." << endl;
+    cout << "Запись системы в файлы..." << endl;
 
     auto fd = fopen("A.txt", "w");
 
@@ -119,10 +132,18 @@ void main_routine(int K, int I, double min_val, double max_val) {
     fd = fopen("b.txt", "w");
 
     for (int i = 0; i < 2 * n + 1; ++i) {
-        fprintf(fd, "%12.6e\n", f(i));
+        fprintf(fd, "%18.12e\n", f(i));
     }
 
     fclose(fd);
+
+    dump_vec(b, "d_2.txt");
+    dump_vec(a, "d_1.txt");
+    dump_vec(d, "d_0.txt");
+    dump_vec(c, "d_minus1.txt");
+    dump_vec(e, "d_minus2.txt");
+
+    b.print();
 
     cout << "Решение системы..." << endl;
 
@@ -200,7 +221,7 @@ void main_routine(int K, int I, double min_val, double max_val) {
 }
 
 int main(int argc, char* argv[]) {
-    test_solve_penta();
+    test_gen_f(10, 0.7);
     // main_routine(stoi(argv[1]), stoi(argv[2]), -1, 1);
 
     return 0;

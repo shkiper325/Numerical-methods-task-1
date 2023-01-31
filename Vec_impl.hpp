@@ -133,4 +133,11 @@ T Vec<T>::l2_norm() const {
     return std::sqrt(ret);
 }
 
+template <class T>
+void Vec<T>::print() const {
+    for (int i = 0; i < size_; ++i) {
+        printf(" %9.3lf\n", data_[i]);
+    }
+}
+
 #endif

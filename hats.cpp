@@ -5,7 +5,7 @@
 
 #include "Vec.hpp"
 #include "error.hpp"
-#include "hat.hpp"
+#include "hats.hpp"
 
 using namespace std;
 

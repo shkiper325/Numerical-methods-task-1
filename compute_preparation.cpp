@@ -1,8 +1,22 @@
+#include <iostream>
+
 #include "compute_preparation.hpp"
 #include "Vec.hpp"
 #include "integrate.hpp"
-#include "hat.hpp"
+#include "hats.hpp"
 #include "error.hpp"
+
+using namespace std;
+
+double get_norm(int i, int n) {
+    auto hat = gen_hat(i, n);
+
+    auto hat_sq = [hat = hat](double x) -> double {return hat(x) * hat(x);};
+    double norm = integrate(static_cast<double>(i / 2 - 1) / n, static_cast<double>(i / 2 + 1) / n, 100, hat_sq);
+    norm = sqrt(norm);
+
+    return norm;
+}
 
 VecD gen_f(int n, int point_count, std::function<double(double)> f) { //ALARM! разные границы для разных шапочек для асимптотики
     if (n % 2 == 1) {
@@ -10,33 +24,20 @@ VecD gen_f(int n, int point_count, std::function<double(double)> f) { //ALARM! �
     }
 
     VecD ret(2 * n + 1);
-
-    // printf("\n");
     
     for(int i = 0; i < 2 * n + 1; ++i) {
+        double norm = get_norm(i, n);
+
+        // double a = static_cast<double>(i / 2 - 1) / n + (i % 2 == 0 ? 0. : 1. / n);
+        double a = static_cast<double>(i / 2 - 1) / n;
+        double b = static_cast<double>(i / 2 + 1) / n;
+
         auto hat = gen_hat(i, n);
         auto multilpied = [hat = hat, f = f](double x) -> double {
             return hat(x) * f(x);
         };
 
-        double a = static_cast<double>(i / 2 - 1) / n + (i % 2 == 0 ? 0. : 1. / n);
-        double b = static_cast<double>(i / 2 + 1) / n;
-
-        // double a = 0;
-        // double b = 1;
-
-        // printf("left border: %9.3lf, right border: %9.3lf\n", a, b);
-        // printf("values in [a, b]: %9.3lf %9.3lf %9.3lf %9.3lf %9.3lf\n",
-        //        multilpied(a),
-        //        multilpied(a + (b - a) / 4),
-        //        multilpied(a + (b - a) / 2),
-        //        multilpied(a + 3 * (b - a) / 4),
-        //        multilpied(b)
-        // );
-
-        // printf("integrated: %9.3lf\n", integrate(a, b, point_count, multilpied));
-
-        ret(i) = integrate(a, b, point_count, multilpied);
+        ret(i) = integrate(a, b, point_count, multilpied) / norm;
     }
     
     return ret;

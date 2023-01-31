@@ -1,11 +1,22 @@
 #!/usr/bin/env python
 
-import numpy as np
 import json
 
-N = 10
+import numpy as np
+import pentapy as pp
 
-TO_BE_PRINTED = True
+TO_BE_PRINTED = False
+
+def integrate(f, a, b, point_count):
+    h = (b - a) / (point_count - 1)
+
+    x = a
+    result = 0
+    for i in range(point_count - 1):
+        result += (f(x + h) + f(x)) / 2 * h
+        x += h
+
+    return result
 
 def fat_hat(i, n, x):
     left = max(0, (i - 1) / n)
@@ -26,15 +37,39 @@ def small_hat(i, n, x):
         return -(2 * n * (x - (i + 0.5) / n)) ** 2 + 1
 
 def eval_result(x, sol):
+    N = sol.shape[0] // 2
+
     val = 0
     for j in range(N + 1):
-        val += fat_hat(j, N, x) * sol[2 * j]
+        hat = lambda x: fat_hat(j, N, x) * fat_hat(j, N, x)
+        norm = integrate(hat, (j - 1) / N, (j + 1) / N, 100)
+        norm = np.sqrt(norm)
+        val += fat_hat(j, N, x) * sol[2 * j] / norm
     for j in range(N):
-        val += small_hat(j, N, x) * sol[2 * j + 1]
+        hat = lambda x: small_hat(j, N, x) * small_hat(j, N, x)
+        norm = integrate(hat, (j - 1) / N, (j + 1) / N, 100)
+        norm = np.sqrt(norm)
+        val += small_hat(j, N, x) * sol[2 * j + 1] / norm
 
     return val
 
-def main():
+def read_vec(path):
+    fd = open(path, 'r')
+    vec = np.array(list(map(np.double, fd.read().split('\n')[:-1])))
+    fd.close()
+
+    return vec
+
+def solve_with_np():
+    fd = open('b.txt', 'r')
+    b = np.array(list(map(np.double, fd.read().split('\n')[:-1])))
+    fd.close()
+
+    b[0] = 0
+    b[-1] = 0
+
+    N = b.shape[0] // 2
+
     fd = open('A.txt', 'r')
     A = np.array(list(map(np.double, fd.read().split('\n')[:-1]))).reshape((2 * N + 1, 2 * N + 1))
     fd.close()
@@ -43,13 +78,6 @@ def main():
     A[0] = np.zeros(shape=(2 * N + 1,))
     A[-1, -1] = 1
     A[0, 0] = 1
-
-    fd = open('b.txt', 'r')
-    b = np.array(list(map(np.double, fd.read().split('\n')[:-1])))
-    fd.close()
-
-    b[0] = 0
-    b[-1] = 0
 
     if TO_BE_PRINTED:
         with np.printoptions(precision=3, suppress=True):
@@ -60,9 +88,48 @@ def main():
 
     sol = np.linalg.solve(A, b)
 
+    print('Error:', np.amax(np.abs((A @ sol) - b)))
+
+    return sol, N
+
+def solve_with_penta():
+    d_2 = read_vec('d_2.txt')
+    d_1 = read_vec('d_1.txt')
+    d_0 = read_vec('d_0.txt')
+    d_minus1 = read_vec('d_minus1.txt')
+    d_minus2 = read_vec('d_minus2.txt')
+
+    N = d_2.shape[0] // 2
+
+    d_0[0] = 1
+    d_1[0] = 0
+    d_2[0] = 0
+
+    d_0[-1] = 1
+    d_minus1[-1] = 0
+    d_minus2[-1] = 0
+
+    b = read_vec('b.txt')
+
+    b[0] = 0
+    b[-1] = 0
+
+    M = np.stack([d_2, d_1, d_0, d_minus1, d_minus2], axis = 0)
+    print(M)
+
+    sol = pp.solve(M, b, is_flat=True)
+
+    print(sol)
+
+    return sol, N
+
+
+def main():
+    sol, N = solve_with_penta()
+
     result = []
-    for i in range(N):
-        x = i / (N - 1)
+    for i in range(N + 1):
+        x = i / N
 
         result.append(eval_result(x, sol))
 
@@ -70,7 +137,7 @@ def main():
     print('Solution in 3/4:', eval_result(0.75, sol))
 
     json_to_write = json.dumps({
-        'x' : [i / (N - 1) for i in range(N)],
+        'x' : [i / N for i in range(N + 1)],
         'y' : list(result)
     })
 

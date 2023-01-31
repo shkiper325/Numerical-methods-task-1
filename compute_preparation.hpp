@@ -5,6 +5,8 @@
 
 #include "Vec.hpp"
 
+double get_norm(int i, int n);
+
 VecD gen_f(int n, int point_count, std::function<double(double)> f);
 
 VecD gen_a(int n);
