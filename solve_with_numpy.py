@@ -44,18 +44,18 @@ def eval_result(x, sol):
         # hat = lambda x: fat_hat(j, N, x) * fat_hat(j, N, x)
         # norm = integrate(hat, (j - 1) / N, (j + 1) / N, 100)
         # norm = np.sqrt(norm)
-        val += fat_hat(j, N, x) * sol[2 * j] / N # / norm
+        val += fat_hat(j, N, x) * sol[2 * j] / N # / norm #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     for j in range(N):
         # hat = lambda x: small_hat(j, N, x) * small_hat(j, N, x)
         # norm = integrate(hat, (j - 1) / N, (j + 1) / N, 100)
         # norm = np.sqrt(norm)
-        val += small_hat(j, N, x) * sol[2 * j + 1] / N # / norm
+        val += small_hat(j, N, x) * sol[2 * j + 1] / N # / norm #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     return val
 
 def read_vec(path):
     fd = open(path, 'r')
-    vec = np.array(list(map(np.double, fd.read().split('\n')[:-1])))
+    vec = np.array(list(map(np.double, fd.read().split('\n')[:-1])), dtype = np.double)
     fd.close()
 
     return vec
@@ -115,14 +115,25 @@ def solve_with_penta():
     b[-1] = 0
 
     M = np.stack([d_2, d_1, d_0, d_minus1, d_minus2], axis = 0)
-    print(M)
+    #print(M)
 
     sol = pp.solve(M, b, is_flat=True)
 
-    print(sol)
+    #print(sol)
 
     return sol, N
 
+def exact(x):
+    if x <=  0.5:
+        return x - 1.11102 * np.sinh(0.816497 * x)
+    else:
+        return 0.159194 * (
+                           6.28166 * x
+                           +1.41421 * np.cosh(0.235702 * (4.73205 - 3. * x)) 
+                           -3.35747 * np.cosh(0.353553 * (1. - 2. * x))
+                           -1.41421 * np.cosh(0.235702 * (-1.26795 + 3. * x))
+                           +7.51362 * np.sinh(0.353553 * (1. - 2. * x))
+        )
 
 def main():
     sol, N = solve_with_penta()
@@ -131,7 +142,9 @@ def main():
     for i in range(N + 1):
         x = i / N
 
-        result.append(eval_result(x, sol))
+        result.append(np.abs(eval_result(x, sol) - exact(x)))
+
+    print('Max error:', np.amax(result))
 
     print('Solution in 1/2:', eval_result(0.5, sol))
     print('Solution in 3/4:', eval_result(0.75, sol))

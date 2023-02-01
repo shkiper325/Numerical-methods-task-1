@@ -78,7 +78,7 @@ void dump_vec(VecD vec, string path) {
     cout << m << endl;
 
     for (int i = 0; i < m; ++i) {
-        fprintf(fd, "%18.12lf\n", vec(i));
+        fprintf(fd, "%30.20e\n", vec(i));
     }
 
     fclose(fd);
@@ -94,7 +94,7 @@ void main_routine(int K, int I, double min_val, double max_val) {
     int n = K;
     const int solution_point_count = K;
     
-    auto function = [](double x) -> double {return sin(5 * x) * exp(x);}; 
+    auto function = [](double x) -> double {return x;}; 
 
     // Вычисления
 
@@ -142,9 +142,7 @@ void main_routine(int K, int I, double min_val, double max_val) {
     dump_vec(d, "d_0.txt");
     dump_vec(c, "d_minus1.txt");
     dump_vec(e, "d_minus2.txt");
-
-    b.print();
-
+    
     cout << "Решение системы..." << endl;
 
     auto solution = solve_penta(a, b, c, d, e, f, n);
