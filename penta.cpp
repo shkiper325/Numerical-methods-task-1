@@ -2,6 +2,10 @@
 #include "Vec.hpp"
 #include <cstdio>
 
+/*
+  Пока нерабочий код
+*/
+
 VecD solve_penta(VecD a, VecD b, VecD c, VecD d, VecD e, VecD f, int n) {
     VecD mu(n, 0.), gamma(n, 0.), z(n, 0.), alpha(n - 1, 0.), beta(n - 2, 0.);
 

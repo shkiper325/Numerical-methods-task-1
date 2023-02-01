@@ -8,17 +8,15 @@
 
 using namespace std;
 
-double get_norm(int i, int n) {
-    auto hat = gen_hat(i, n);
+/*
+  Создание правого столбца для СЛАУ из какой-то функции f.
+  point_count - число точек сетки, по которой интегрируется
+  интегрирования f и шапочки. В дальнейшем надо перейти к
+  квадратурной формуле.
+*/
 
-    auto hat_sq = [hat = hat](double x) -> double {return hat(x) * hat(x);};
-    double norm = integrate(static_cast<double>(i / 2 - 1) / n, static_cast<double>(i / 2 + 1) / n, 100, hat_sq);
-    norm = sqrt(norm);
 
-    return norm;
-}
-
-VecD gen_f(int n, int point_count, std::function<double(double)> f) { //ALARM! разные границы для разных шапочек для асимптотики
+VecD gen_f(int n, int point_count, std::function<double(double)> f) {
     if (n % 2 == 1) {
         error(-1, "Now can generate b ony for even numbers");
     }
@@ -42,6 +40,20 @@ VecD gen_f(int n, int point_count, std::function<double(double)> f) { //ALARM! �
     
     return ret;
 }
+
+/*
+  Генерируют строки для пентадиагональной матрицы.
+  Порядок строк:
+
+  b
+  a
+  d
+  c
+  e
+
+  Такой порядок нужен, чтобы работал решатель пентадиагональной системы.
+  (решатель пока не работает)
+*/
 
 VecD gen_e(int n) {
     VecD ret(2 * n + 1, 0.);

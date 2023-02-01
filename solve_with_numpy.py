@@ -7,6 +7,9 @@ import pentapy as pp
 
 TO_BE_PRINTED = False
 
+"""
+Простое численное интегрирование
+"""
 def integrate(f, a, b, point_count):
     h = (b - a) / (point_count - 1)
 
@@ -18,6 +21,9 @@ def integrate(f, a, b, point_count):
 
     return result
 
+"""
+Реализация толестой шапочки
+"""
 def fat_hat(i, n, x):
     left = max(0, (i - 1) / n)
     right = min(1, (i + 1) / n)
@@ -27,6 +33,9 @@ def fat_hat(i, n, x):
     else:
         return -(n * (x - i / n)) ** 2 + 1
 
+"""
+Реализация тонкой шапочки
+"""
 def small_hat(i, n, x):
     left = max(0, i / n)
     right = min(1, (i + 1) / n)
@@ -36,23 +45,30 @@ def small_hat(i, n, x):
     else:
         return -(2 * n * (x - (i + 0.5) / n)) ** 2 + 1
 
+"""
+Вычисление функции-решения ОДУ в точке x при условии, что при решении СЛАУ получились
+коэффициенты sol (2 * n + 1 штук)
+"""
 def eval_result(x, sol):
-    N = sol.shape[0] // 2
+    n = sol.shape[0] // 2
 
     val = 0
-    for j in range(N + 1):
-        # hat = lambda x: fat_hat(j, N, x) * fat_hat(j, N, x)
-        # norm = integrate(hat, (j - 1) / N, (j + 1) / N, 100)
+    for j in range(n + 1):
+        # hat = lambda x: fat_hat(j, n, x) * fat_hat(j, n, x)
+        # norm = integrate(hat, (j - 1) / n, (j + 1) / n, 100)
         # norm = np.sqrt(norm)
-        val += fat_hat(j, N, x) * sol[2 * j] / N # / norm #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    for j in range(N):
-        # hat = lambda x: small_hat(j, N, x) * small_hat(j, N, x)
-        # norm = integrate(hat, (j - 1) / N, (j + 1) / N, 100)
+        val += fat_hat(j, n, x) * sol[2 * j]# / norm #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    for j in range(n):
+        # hat = lambda x: small_hat(j, n, x) * small_hat(j, n, x)
+        # norm = integrate(hat, (j - 1) / n, (j + 1) / n, 100)
         # norm = np.sqrt(norm)
-        val += small_hat(j, N, x) * sol[2 * j + 1] / N # / norm #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        val += small_hat(j, n, x) * sol[2 * j + 1] # / norm #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     return val
 
+"""
+Прочитать столбец из чисел с плавающей запятой
+"""
 def read_vec(path):
     fd = open(path, 'r')
     vec = np.array(list(map(np.double, fd.read().split('\n')[:-1])), dtype = np.double)
@@ -60,6 +76,9 @@ def read_vec(path):
 
     return vec
 
+"""
+Решить систему с помощью numpy
+"""
 def solve_with_np():
     fd = open('b.txt', 'r')
     b = np.array(list(map(np.double, fd.read().split('\n')[:-1])))
@@ -68,14 +87,14 @@ def solve_with_np():
     b[0] = 0
     b[-1] = 0
 
-    N = b.shape[0] // 2
+    n = b.shape[0] // 2
 
     fd = open('A.txt', 'r')
-    A = np.array(list(map(np.double, fd.read().split('\n')[:-1]))).reshape((2 * N + 1, 2 * N + 1))
+    A = np.array(list(map(np.double, fd.read().split('\n')[:-1]))).reshape((2 * n + 1, 2 * n + 1))
     fd.close()
 
-    A[-1] = np.zeros(shape=(2 * N + 1,))
-    A[0] = np.zeros(shape=(2 * N + 1,))
+    A[-1] = np.zeros(shape=(2 * n + 1,))
+    A[0] = np.zeros(shape=(2 * n + 1,))
     A[-1, -1] = 1
     A[0, 0] = 1
 
@@ -90,8 +109,11 @@ def solve_with_np():
 
     print('Error:', np.amax(np.abs((A @ sol) - b)))
 
-    return sol, N
+    return sol, n
 
+"""
+Решить систему с помощью pentapy
+"""
 def solve_with_penta():
     d_2 = read_vec('d_2.txt')
     d_1 = read_vec('d_1.txt')
@@ -99,7 +121,7 @@ def solve_with_penta():
     d_minus1 = read_vec('d_minus1.txt')
     d_minus2 = read_vec('d_minus2.txt')
 
-    N = d_2.shape[0] // 2
+    n = d_2.shape[0] // 2
 
     d_0[0] = 1
     d_1[0] = 0
@@ -121,8 +143,11 @@ def solve_with_penta():
 
     #print(sol)
 
-    return sol, N
+    return sol, n
 
+"""
+Точное решение
+"""
 def exact(x):
     if x <=  0.5:
         return x - 1.11102 * np.sinh(0.816497 * x)
@@ -136,21 +161,23 @@ def exact(x):
         )
 
 def main():
-    sol, N = solve_with_penta()
+    sol, n = solve_with_penta()
 
     result = []
-    for i in range(N + 1):
-        x = i / N
+    diffs = []
+    for i in range(n + 1):
+        x = i / n
 
-        result.append(np.abs(eval_result(x, sol) - exact(x)))
+        result.append(eval_result(x, sol))
+        diffs.append(np.abs(eval_result(x, sol) - exact(x)))
 
-    print('Max error:', np.amax(result))
+    print('Max error:', np.amax(diffs))
 
     print('Solution in 1/2:', eval_result(0.5, sol))
     print('Solution in 3/4:', eval_result(0.75, sol))
 
     json_to_write = json.dumps({
-        'x' : [i / N for i in range(N + 1)],
+        'x' : [i / n for i in range(n + 1)],
         'y' : list(result)
     })
 

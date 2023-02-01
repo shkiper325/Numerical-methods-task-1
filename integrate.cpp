@@ -5,6 +5,11 @@
 
 using namespace std;
 
+/*
+  Примитивное интегрирование f на [a,b] методом прямоугольников
+  по n равноотстоящим узлам.
+*/
+
 double integrate(double a, double b, int n, function<double(double)> f) {
     if (n < 2) error(-1, "n < 2 in integrate");
 

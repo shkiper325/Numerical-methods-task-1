@@ -12,6 +12,10 @@ using namespace std;
 
 const double PI = 3.1416;
 
+/*
+  Тест для функции интегрирования
+*/
+
 void test_integrate() {
     printf("\nintegrate() test:\n");
 
@@ -21,28 +25,35 @@ void test_integrate() {
     printf("x^3: %9.3lf\n", integrate(0, 0.5, 100, [](double x) -> double {return x * x * x;}));
 }
 
-void test_gen_f(int n, double x) {
-    auto f = [](double x) -> double {
-        return x;
-    };
+/*
+  Нерабочий тест, можно игнорировать
+*/
 
-    auto b = gen_f(n, 100, f);
+// void test_gen_f(int n, double x) {
+//     auto f = [](double x) -> double {
+//         return x;
+//     };
 
-    // printf("\n");
-    // for(int i = 0; i < 2 * n + 1; ++i) {
-    //     printf("b(%d): %9.6lf\n", i, b(i));
-    // }
+//     auto b = gen_f(n, 100, f);
 
-    double val = 0;
+//     // printf("\n");
+//     // for(int i = 0; i < 2 * n + 1; ++i) {
+//     //     printf("b(%d): %9.6lf\n", i, b(i));
+//     // }
 
-    for(int i = 0; i < 2 * n + 1; ++i) {
-        double norm = get_norm(i, n);
-        cout << norm << endl;
-        val += b(i) * gen_hat(i, n)(x) / norm;
-    }
+//     double val = 0;
 
-    printf("\nval: %9.6lf\n", val);
-}
+//     for(int i = 0; i < 2 * n + 1; ++i) {
+//         val += b(i) * gen_hat(i, n)(x);
+//     }
+
+//     printf("\nval: %9.6lf\n", val);
+// }
+
+/*
+  Тест решателя пентадиагональной системы,
+  решатель его пока не проходит
+*/
 
 void test_solve_penta() {
     double arr_a[] = {  2,  4, -1, -5, -2,  2,  0};
@@ -72,10 +83,13 @@ void test_solve_penta() {
     }
 }
 
+/*
+  Запись вектора в столбик в файл
+*/
+
 void dump_vec(VecD vec, string path) {
     auto fd = fopen(path.c_str(), "w");
     auto m = vec.size();
-    cout << m << endl;
 
     for (int i = 0; i < m; ++i) {
         fprintf(fd, "%30.20e\n", vec(i));
@@ -110,6 +124,12 @@ void main_routine(int K, int I, double min_val, double max_val) {
 
     cout << "Запись системы в файлы..." << endl;
 
+    // Запись в файл
+
+    /*
+      Для решателя СЛАУ в numpy
+    */
+
     auto fd = fopen("A.txt", "w");
 
     for (int i = 0; i < 2 * n + 1; ++i) {
@@ -137,70 +157,79 @@ void main_routine(int K, int I, double min_val, double max_val) {
 
     fclose(fd);
 
+    /*
+      Для решателя в pentapy
+    */
+
     dump_vec(b, "d_2.txt");
     dump_vec(a, "d_1.txt");
     dump_vec(d, "d_0.txt");
     dump_vec(c, "d_minus1.txt");
     dump_vec(e, "d_minus2.txt");
+
+    /*
+      Решение линейной системы; пока что его надо запускать вручную в программах на python
+      с даными, записанными в файлы выше.
+    */
     
-    cout << "Решение системы..." << endl;
+    // cout << "Решение системы..." << endl;
 
-    auto solution = solve_penta(a, b, c, d, e, f, n);
+    // auto solution = solve_penta(a, b, c, d, e, f, n);
 
-    // Обработка
+    // // Обработка
 
-    cout << "Подготовка выходного вектора..." << endl;
+    // cout << "Подготовка выходного вектора..." << endl;
 
-    VecD ret(solution_point_count, 0.);
-    for(int pos = 0; pos < solution_point_count; ++pos) {
-        double x = static_cast<double>(pos) / (solution_point_count - 1);
+    // VecD ret(solution_point_count, 0.);
+    // for(int pos = 0; pos < solution_point_count; ++pos) {
+    //     double x = static_cast<double>(pos) / (solution_point_count - 1);
 
-        for(int i = 0; i < 2 * n + 1; ++i) {
-            double a = static_cast<double>(i / 2 - 1) / n + (i % 2 == 0 ? 0. : 1. / n);
-            double b = static_cast<double>(i / 2 + 1) / n;
+    //     for(int i = 0; i < 2 * n + 1; ++i) {
+    //         double a = static_cast<double>(i / 2 - 1) / n + (i % 2 == 0 ? 0. : 1. / n);
+    //         double b = static_cast<double>(i / 2 + 1) / n;
 
-            double norm = integrate(a, b, solution_integrate_point_count, gen_hat(i, n));
-            ret(pos) += solution(i) * gen_hat(i, n)(x) / norm;
-        }
-    }
+    //         double norm = integrate(a, b, solution_integrate_point_count, gen_hat(i, n));
+    //         ret(pos) += solution(i) * gen_hat(i, n)(x) / norm;
+    //     }
+    // }
 
-    // Запись в файл
+    // // Запись в файл
 
-    cout << "Запись в points.json" << endl;
+    // cout << "Запись в points.json" << endl;
 
-    // xs
+    // // xs
 
-    fd = fopen("points.json", "w");
+    // fd = fopen("points.json", "w");
 
-    fprintf(fd, "{\"x\" : [\n");
+    // fprintf(fd, "{\"x\" : [\n");
 
-    for(int pos = 0; pos < solution_point_count; ++pos) {
-        double x = static_cast<double>(pos) / (solution_point_count - 1);
+    // for(int pos = 0; pos < solution_point_count; ++pos) {
+    //     double x = static_cast<double>(pos) / (solution_point_count - 1);
 
-        if (pos == solution_point_count - 1) {
-            fprintf(fd, "    %9.6lf\n", x);
-        } else {
-            fprintf(fd, "    %9.6lf,\n", x);
-        }
-    }
+    //     if (pos == solution_point_count - 1) {
+    //         fprintf(fd, "    %9.6lf\n", x);
+    //     } else {
+    //         fprintf(fd, "    %9.6lf,\n", x);
+    //     }
+    // }
 
-    fprintf(fd, "],\n");
+    // fprintf(fd, "],\n");
 
-    // ys
+    // // ys
 
-    fprintf(fd, "\"y\" : [\n");
+    // fprintf(fd, "\"y\" : [\n");
 
-    for(int pos = 0; pos < solution_point_count; ++pos) {
-        if (pos == solution_point_count - 1) {
-            fprintf(fd, "    %9.6lf\n", min(max(ret(pos), min_val), max_val));
-        } else {
-            fprintf(fd, "    %9.6lf,\n", min(max(ret(pos), min_val), max_val));
-        }
-    }
+    // for(int pos = 0; pos < solution_point_count; ++pos) {
+    //     if (pos == solution_point_count - 1) {
+    //         fprintf(fd, "    %9.6lf\n", min(max(ret(pos), min_val), max_val));
+    //     } else {
+    //         fprintf(fd, "    %9.6lf,\n", min(max(ret(pos), min_val), max_val));
+    //     }
+    // }
 
-    fprintf(fd, "]}\n");
+    // fprintf(fd, "]}\n");
 
-    fclose(fd);
+    // fclose(fd);
 
     cout << "Готово!" << endl;
 }

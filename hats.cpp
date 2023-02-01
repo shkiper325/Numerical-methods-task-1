@@ -9,6 +9,10 @@
 
 using namespace std;
 
+/*
+  Предпосчитанные в mathematica скалярные произведения (L[phi(i+pos),phi(i)])
+*/
+
 double gen_hats_scalar_product(int i, int pos, int n) {
     if (n % 2 == 1) {
         error(-1, "Now can generate hats ony for even numbers");
@@ -72,6 +76,10 @@ double gen_hats_scalar_product(int i, int pos, int n) {
     std::exit(-1);
 }
 
+/* 
+  То же, что и выше, только старая версия, можно не смотреть (код с ошибкой)
+*/
+
 // double gen_hats_scalar_product(int i, int pos, int n) {
 //     if (n % 2 == 1) {
 //         error(-1, "Now can generate hats ony for even numbers");
@@ -131,6 +139,12 @@ double gen_hats_scalar_product(int i, int pos, int n) {
 //     exit(-1);
 // }
 
+/*
+  Функция, возвращяющая функцию, которая реализует
+  большую шапочку с центром i при сетке с точками
+  [0..n]
+*/
+
 function<double(double)> big_hat(int i, int n) {
     return [n = n, i = i](double x) -> double {
         double left = max(0., static_cast<double>(i - 1) / n);
@@ -141,6 +155,12 @@ function<double(double)> big_hat(int i, int n) {
     };
 }
 
+/*
+  Функция, возвраляющая функцию, которая реализует
+  маленькую шапочку с севым концом i при сетке с точками
+  [0..n]
+*/
+
 function<double(double)> small_hat(int i, int n) {
     return [n = n, i = i](double x) -> double {
         double left = max(0., static_cast<double>(i) / n);
@@ -150,6 +170,11 @@ function<double(double)> small_hat(int i, int n) {
         else return -pow(2. * static_cast<double>(n) * (x - (static_cast<double>(i) + 0.5) / n), 2) + 1.;
     };
 }
+
+/*
+  Функция, возвращающая большую или маленькую шапочку в зависимости от i.
+  i \in [0..2n], шапочки упорядочены как было указано преподавателем.
+*/
 
 function<double(double)> gen_hat(int i, int n) {
     if (i % 2 == 0) return big_hat(i / 2, n);
