@@ -41,15 +41,15 @@ def eval_result(x, sol):
 
     val = 0
     for j in range(N + 1):
-        hat = lambda x: fat_hat(j, N, x) * fat_hat(j, N, x)
-        norm = integrate(hat, (j - 1) / N, (j + 1) / N, 100)
-        norm = np.sqrt(norm)
-        val += fat_hat(j, N, x) * sol[2 * j] / norm
+        # hat = lambda x: fat_hat(j, N, x) * fat_hat(j, N, x)
+        # norm = integrate(hat, (j - 1) / N, (j + 1) / N, 100)
+        # norm = np.sqrt(norm)
+        val += fat_hat(j, N, x) * sol[2 * j] / N # / norm
     for j in range(N):
-        hat = lambda x: small_hat(j, N, x) * small_hat(j, N, x)
-        norm = integrate(hat, (j - 1) / N, (j + 1) / N, 100)
-        norm = np.sqrt(norm)
-        val += small_hat(j, N, x) * sol[2 * j + 1] / norm
+        # hat = lambda x: small_hat(j, N, x) * small_hat(j, N, x)
+        # norm = integrate(hat, (j - 1) / N, (j + 1) / N, 100)
+        # norm = np.sqrt(norm)
+        val += small_hat(j, N, x) * sol[2 * j + 1] / N # / norm
 
     return val
 

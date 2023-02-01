@@ -149,11 +149,6 @@ void main_routine(int K, int I, double min_val, double max_val) {
 
     auto solution = solve_penta(a, b, c, d, e, f, n);
 
-    // for(int i = 0; i < solution.size(); ++i) {
-    //     printf("%9.3lf\n", solution(i));
-    // }
-    // printf("\n");
-
     // Обработка
 
     cout << "Подготовка выходного вектора..." << endl;
@@ -170,14 +165,6 @@ void main_routine(int K, int I, double min_val, double max_val) {
             ret(pos) += solution(i) * gen_hat(i, n)(x) / norm;
         }
     }
-
-    // // Вывод
-    
-    // for(int pos = 0; pos < solution_point_count; ++pos) {
-    //     double x = static_cast<double>(pos) / (solution_point_count - 1);
-
-    //     printf("%9.3lf: %9.3lf\n", x, ret(pos));
-    // }
 
     // Запись в файл
 
@@ -221,8 +208,8 @@ void main_routine(int K, int I, double min_val, double max_val) {
 }
 
 int main(int argc, char* argv[]) {
-    test_gen_f(10, 0.7);
-    // main_routine(stoi(argv[1]), stoi(argv[2]), -1, 1);
+    // test_gen_f(10, 0.7);
+    main_routine(stoi(argv[1]), stoi(argv[2]), -1, 1);
 
     return 0;
 }
