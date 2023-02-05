@@ -108,7 +108,9 @@ void main_routine(int K, int I, double min_val, double max_val) {
     int n = K;
     const int solution_point_count = K;
     
-    auto function = [](double x) -> double {return x;}; 
+    auto function = [](double x) -> double {return 1 - (x - 0.5) * (x - 0.5) * 4;}; 
+    // auto function = [](double x) -> double {return x;}; 
+
 
     // Вычисления
 

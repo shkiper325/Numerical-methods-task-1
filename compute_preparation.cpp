@@ -26,8 +26,8 @@ VecD gen_f(int n, int point_count, std::function<double(double)> f) {
     for(int i = 0; i < 2 * n + 1; ++i) {
         double norm = 1; // get_norm(i, n);
 
-        // double a = static_cast<double>(i / 2 - 1) / n + (i % 2 == 0 ? 0. : 1. / n);
-        double a = static_cast<double>(i / 2 - 1) / n;
+        double a = static_cast<double>(i / 2 - 1) / n + (i % 2 == 0 ? 0. : 1. / n);
+        // double a = static_cast<double>(i / 2 - 1) / n;
         double b = static_cast<double>(i / 2 + 1) / n;
 
         auto hat = gen_hat(i, n);

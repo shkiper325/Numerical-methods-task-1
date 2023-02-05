@@ -53,6 +53,26 @@ def eval_result(x, sol):
 
     return val
 
+def derivative(vals, h):
+    ret = [None for i in range(len(vals))]
+
+    ret[0] = (vals[1] - vals[0]) / h
+    for i in range(1, len(vals) - 1): 
+        ret[i] = (vals[i + 1] - vals[i - 1]) / (2 * h)
+    ret[-1] = (vals[-1] - vals[-2]) / h
+
+    return ret
+
+def second_derivative(vals, h):
+    ret = [None for i in range(len(vals))]
+
+    ret[0] = (vals[2] - 2 * vals[1] + vals[0]) / (h * h)
+    for i in range(1, len(vals) - 1): 
+        ret[i] = (vals[i + 1] - 2 * vals[i] + vals[i - 1]) / (h * h)
+    ret[-1] = (vals[-1] - 2 * vals[-2] + vals[-3]) / (h * h)
+
+    return ret
+
 def read_vec(path):
     fd = open(path, 'r')
     vec = np.array(list(map(np.double, fd.read().split('\n')[:-1])), dtype = np.double)
@@ -117,7 +137,7 @@ def solve_with_penta():
     M = np.stack([d_2, d_1, d_0, d_minus1, d_minus2], axis = 0)
     #print(M)
 
-    sol = pp.solve(M, b, is_flat=True)
+    sol = pp.solve(M, b, is_flat=True, solver=1)
 
     #print(sol)
 
@@ -139,12 +159,14 @@ def main():
     sol, N = solve_with_penta()
 
     result = []
+    error = []
     for i in range(N + 1):
         x = i / N
 
-        result.append(np.abs(eval_result(x, sol) - exact(x)))
+        result.append(eval_result(x, sol))
+        error.append(np.abs(eval_result(x, sol) - exact(x)))
 
-    print('Max error:', np.amax(result))
+    #print('Max error:', np.amax(error))
 
     #print('Solution in 1/2:', eval_result(0.5, sol))
     #print('Solution in 3/4, eval_result(0.75, sol))
@@ -155,6 +177,18 @@ def main():
     })
 
     fd = open('points.json', 'w')
+    fd.write(json_to_write)
+    fd.close()
+
+    second_der = np.array(second_derivative(result, 1 / N))
+    left = [(-1.5 if i <= (N + 1) / 2 else -2) * second_der[i] + result[i] for i in range(N + 1)]
+    
+    json_to_write = json.dumps({
+        'x' : [i / N for i in range(N + 1)],
+        'y' : list(left)
+    })
+
+    fd = open('left.json', 'w')
     fd.write(json_to_write)
     fd.close()
 

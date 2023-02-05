@@ -17,3 +17,9 @@ echo "800"
 echo "1600"
 ./main 1600 10000
 ./solve_with_python.py
+echo "3200"
+./main 3200 10000
+./solve_with_python.py
+echo "6400"
+./main 6400 10000
+./solve_with_python.py

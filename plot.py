@@ -6,7 +6,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 def main():
-    fd = open('points.json', 'r')
+    fd = open('left.json', 'r')
     text = fd.read()
     fd.close()
 
@@ -14,7 +14,7 @@ def main():
 
     plt.figure(figsize=(15, 10), dpi=80)
 
-    plt.plot(parsed['x'], parsed['y'])
+    plt.plot(parsed['x'][2:-2], parsed['y'][2:-2])
 
     plt.xlabel('x')
     plt.ylabel('y')
