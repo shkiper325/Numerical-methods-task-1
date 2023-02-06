@@ -1,5 +1,6 @@
 #include <functional>
 #include <algorithm>
+#include <iostream>
 
 #include <cmath>
 
@@ -20,6 +21,8 @@ double gen_hats_scalar_product(int i, int pos, int n) {
 
     if (i % 2 == 0) { //integrate with big
         i /= 2;
+
+        cout << i << ' ' << n << endl;
 
         switch (pos) {
         case -2:
@@ -49,6 +52,8 @@ double gen_hats_scalar_product(int i, int pos, int n) {
         }
     } else {
         i /= 2;
+
+        cout << i << ' ' << n << endl;
 
         switch (pos) {
         case -2:

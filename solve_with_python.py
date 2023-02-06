@@ -5,7 +5,7 @@ import json
 import numpy as np
 import pentapy as pp
 
-TO_BE_PRINTED = False
+TO_BE_PRINTED = True
 
 def integrate(f, a, b, point_count):
     h = (b - a) / (point_count - 1)
@@ -94,16 +94,16 @@ def solve_with_np():
     A = np.array(list(map(np.double, fd.read().split('\n')[:-1]))).reshape((2 * N + 1, 2 * N + 1))
     fd.close()
 
-    A[-1] = np.zeros(shape=(2 * N + 1,))
-    A[0] = np.zeros(shape=(2 * N + 1,))
-    A[-1, -1] = 1
-    A[0, 0] = 1
+    # A[-1] = np.zeros(shape=(2 * N + 1,))
+    # A[0] = np.zeros(shape=(2 * N + 1,))
+    # A[-1, -1] = 1
+    # A[0, 0] = 1
 
     if TO_BE_PRINTED:
         with np.printoptions(precision=3, suppress=True):
             for line in A:
                 for val in line:
-                    print(str(val).rjust(8), end=' ')
+                    print(str(val).rjust(15), end=' ')
                 print()
 
     sol = np.linalg.solve(A, b)
@@ -156,7 +156,7 @@ def exact(x):
         )
 
 def main():
-    sol, N = solve_with_penta()
+    sol, N = solve_with_np()
 
     result = []
     error = []
@@ -166,7 +166,7 @@ def main():
         result.append(eval_result(x, sol))
         error.append(np.abs(eval_result(x, sol) - exact(x)))
 
-    #print('Max error:', np.amax(error))
+    print('Max error:', np.amax(error))
 
     #print('Solution in 1/2:', eval_result(0.5, sol))
     #print('Solution in 3/4, eval_result(0.75, sol))
@@ -181,7 +181,8 @@ def main():
     fd.close()
 
     second_der = np.array(second_derivative(result, 1 / N))
-    left = [(-1.5 if i <= (N + 1) / 2 else -2) * second_der[i] + result[i] for i in range(N + 1)]
+    # left = [(-1.5 if i <= (N + 1) / 2 else -2) * second_der[i] + result[i] for i in range(N + 1)]
+    left = [(-1.5 if i <= (N + 1) / 2 else -2) * second_der[i] + result[i]  for i in range(N + 1)]
     
     json_to_write = json.dumps({
         'x' : [i / N for i in range(N + 1)],

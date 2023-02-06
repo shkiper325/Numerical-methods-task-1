@@ -108,18 +108,21 @@ void main_routine(int K, int I, double min_val, double max_val) {
     int n = K;
     const int solution_point_count = K;
     
-    auto function = [](double x) -> double {return 1 - (x - 0.5) * (x - 0.5) * 4;}; 
+    auto function = [](double x) -> double {return x;}; 
     // auto function = [](double x) -> double {return x;}; 
-
-
+    
     // Вычисления
 
     cout << "Инициализация" << endl;
 
     auto a = gen_a(n);
+    cout << "########################################" << endl;
     auto b = gen_b(n);
+    cout << "########################################" << endl;
     auto c = gen_c(n);
+    cout << "########################################" << endl;
     auto d = gen_d(n);
+    cout << "########################################" << endl;
     auto e = gen_e(n);
 
     auto f = gen_f(n, integrate_point_count, function);

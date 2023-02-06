@@ -2,6 +2,8 @@
 
 import json
 
+import numpy as np
+
 import matplotlib
 import matplotlib.pyplot as plt
 
@@ -14,7 +16,10 @@ def main():
 
     plt.figure(figsize=(15, 10), dpi=80)
 
-    plt.plot(parsed['x'][2:-2], parsed['y'][2:-2])
+    y = np.array(parsed['y'][2:-2])
+    y = np.clip(y, -2, 2)
+
+    plt.plot(parsed['x'][2:-2], y)
 
     plt.xlabel('x')
     plt.ylabel('y')
