@@ -22,8 +22,6 @@ double gen_hats_scalar_product(int i, int pos, int n) {
     if (i % 2 == 0) { //integrate with big
         i /= 2;
 
-        cout << i << ' ' << n << endl;
-
         switch (pos) {
         case -2:
             if (i == 0) return 0;
@@ -52,9 +50,7 @@ double gen_hats_scalar_product(int i, int pos, int n) {
         }
     } else {
         i /= 2;
-
-        cout << i << ' ' << n << endl;
-
+        
         switch (pos) {
         case -2:
             return 0;

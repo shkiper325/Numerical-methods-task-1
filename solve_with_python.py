@@ -94,10 +94,10 @@ def solve_with_np():
     A = np.array(list(map(np.double, fd.read().split('\n')[:-1]))).reshape((2 * N + 1, 2 * N + 1))
     fd.close()
 
-    # A[-1] = np.zeros(shape=(2 * N + 1,))
-    # A[0] = np.zeros(shape=(2 * N + 1,))
-    # A[-1, -1] = 1
-    # A[0, 0] = 1
+    A[-1] = np.zeros(shape=(2 * N + 1,))
+    A[0] = np.zeros(shape=(2 * N + 1,))
+    A[-1, -1] = 1
+    A[0, 0] = 1
 
     if TO_BE_PRINTED:
         with np.printoptions(precision=3, suppress=True):
@@ -156,7 +156,7 @@ def exact(x):
         )
 
 def main():
-    sol, N = solve_with_np()
+    sol, N = solve_with_penta()
 
     result = []
     error = []

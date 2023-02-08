@@ -116,13 +116,9 @@ void main_routine(int K, int I, double min_val, double max_val) {
     cout << "Инициализация" << endl;
 
     auto a = gen_a(n);
-    cout << "########################################" << endl;
     auto b = gen_b(n);
-    cout << "########################################" << endl;
     auto c = gen_c(n);
-    cout << "########################################" << endl;
     auto d = gen_d(n);
-    cout << "########################################" << endl;
     auto e = gen_e(n);
 
     auto f = gen_f(n, integrate_point_count, function);
