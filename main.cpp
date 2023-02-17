@@ -49,8 +49,16 @@ void main_routine(int N, int I) {
 
     cout << "Инициализация" << endl;
 
+<<<<<<< HEAD
     auto diags = gen_diag(N);
     auto f = gen_f(N, I, function);
+=======
+    auto a = gen_a(n);
+    auto b = gen_b(n);
+    auto c = gen_c(n);
+    auto d = gen_d(n);
+    auto e = gen_e(n);
+>>>>>>> refs/remotes/origin/main
 
     auto ready = set_initial_cond(diags, f);
 
