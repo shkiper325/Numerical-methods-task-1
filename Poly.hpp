@@ -136,7 +136,7 @@ class PolyWithSupp {
     int N_;
 public:
     PolyWithSupp(Poly poly, int start, int end, int N) : poly_(poly), start_(start), end_(end), N_(N) {
-        if (N % 2 == 1) error(-1, "N is odd");
+        // if (N % 2 == 1) error(-1, "N is odd");
 
         start_ = std::max(start_, 0);
         end_ = std::min(end_, N_);
