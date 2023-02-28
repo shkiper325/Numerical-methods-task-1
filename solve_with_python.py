@@ -101,7 +101,8 @@ def main():
 
     json_to_write = json.dumps({
         'x' : [i / N for i in range(N + 1)],
-        'y' : list(result)
+        'y_computed' : list(result),
+        'y_target' : [exact_solution(i / N) for i in range(N + 1)]
     })
 
     fd = open('tmp/points.json', 'w')
