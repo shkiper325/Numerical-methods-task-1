@@ -72,18 +72,7 @@ def solve_with_penta():
 
     N = c.shape[0] // 2
 
-    # d_0[0] = 1
-    # d_1[0] = 0
-    # d_2[0] = 0
-
-    # d_0[-1] = 1
-    # d_minus1[-1] = 0
-    # d_minus2[-1] = 0
-
     f = read_vec('tmp/f.txt')
-
-    # b[0] = 0
-    # b[-1] = 0
 
     M = np.stack([a, b, c, d, e], axis = 0)
 
@@ -119,17 +108,17 @@ def main():
     fd.write(json_to_write)
     fd.close()
 
-    second_der = np.array(second_derivative(result, 1 / N))
-    left = [(-1.5 if i <= (N + 1) / 2 else -2) * second_der[i] + result[i] for i in range(N + 1)]
+    # second_der = np.array(second_derivative(result, 1 / N))
+    # left = [(-1.5 if i <= (N + 1) / 2 else -2) * second_der[i] + result[i] for i in range(N + 1)]
 
-    json_to_write = json.dumps({
-        'x' : [i / N for i in range(N + 1)],
-        'y' : list(left)
-    })
+    # json_to_write = json.dumps({
+    #     'x' : [i / N for i in range(N + 1)],
+    #     'y' : list(left)
+    # })
 
-    fd = open('tmp/left.json', 'w')
-    fd.write(json_to_write)
-    fd.close()
+    # fd = open('tmp/left.json', 'w')
+    # fd.write(json_to_write)
+    # fd.close()
 
 if __name__ == '__main__':
     main()
