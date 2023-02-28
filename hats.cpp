@@ -75,7 +75,7 @@ PolyWithSupp poly_hat(int k, int N) {
 }
 
 vector<vector<double> >gen_diag(int N) {
-    if (N % 2 == 1) error(-1, "N is odd");
+    // if (N % 2 == 1) error(-1, "N is odd");
     if (N < 100) error(-1, "N < 100");
 
     vector<double> a(2 * N - 1);
@@ -125,9 +125,9 @@ vector<vector<double> >gen_diag(int N) {
 }
 
 vector<double> gen_f(int N, int point_count, std::function<double(double)> f) {
-    if (N % 2 == 1) {
-        error(-1, "Now can generate b ony for even numbers");
-    }
+    // if (N % 2 == 1) {
+    //     error(-1, "Now can generate b ony for even numbers");
+    // }
 
     vector<double> ret(2 * N + 1);
     
