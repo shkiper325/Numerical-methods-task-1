@@ -151,12 +151,28 @@ public:
             return 0;
         }
         else if (end_ - start_ == 1) {
-            double k = 1;
-            if (enable_k) {
-                k = end_ <= N_ / 2 ? k1 : k2;
-            }
+            double a = static_cast<double>(start_) / N_;
+            double c = static_cast<double>(end_) / N_;
+            double b = (a + c) / 2;
 
-            return k * poly_.integrate(static_cast<double>(start_) / N_, static_cast<double>(end_) / N_);
+            if (N_ % 2 == 0) { // N_ is even
+                double k = 1;
+                if (enable_k) {
+                    k = end_ <= N_ / 2 ? k1 : k2;
+                }
+
+                return k * poly_.integrate(a, c);
+            } else { // N_ is odd
+                if (enable_k) {
+                    if (end_ + start_ == N_ && enable_k) return k1 * poly_.integrate(a, b) + k2 * poly_.integrate(b, c);
+                    else if (end_ <= N_ / 2) return k1 * poly_.integrate(a, c);
+                    else return k2 * poly_.integrate(a, c);
+                }
+                else {
+                    return poly_.integrate(a, c);
+                }
+            }
+            
         }
         else if (end_ - start_ == 2) {
             auto p1 = PolyWithSupp(poly_, start_, end_ - 1, N_);
