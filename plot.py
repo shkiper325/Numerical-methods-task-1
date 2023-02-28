@@ -15,7 +15,7 @@ def main():
     parsed = json.loads(text)
 
 
-    plt.figure(figsize=(25, 20), dpi=100)
+    plt.figure(figsize=(15, 10), dpi=80)
 
     plt.plot(parsed['x'], parsed['y_computed'], color='blue')
     plt.plot(parsed['x'], parsed['y_target'], color='orange')
