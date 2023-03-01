@@ -1,6 +1,6 @@
 ### This is solution of ODE using special method for my university task
 
-**Notice:** you need *pentapy*, *numpy* and *matplotlib* to use this repo code.
+**Notice:** you need *pentapy*, *numpy* and *matplotlib* python libraries to use this repo code.
 
 To build, completely test solution and create plot just run
     ./test.bash
