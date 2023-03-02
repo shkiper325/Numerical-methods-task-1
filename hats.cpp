@@ -9,8 +9,8 @@
 
 using namespace std;
 
-const double k1 = 1.5;
-const double k2 = 2.;
+const double k1 = 1;
+const double k2 = 1.5;
 
 /*
     Функция, возвращяющая функцию, которая реализует
@@ -76,7 +76,7 @@ PolyWithSupp poly_hat(int k, int N) {
 
 vector<vector<double> >gen_diag(int N) {
     // if (N % 2 == 1) error(-1, "N is odd");
-    if (N < 100) error(-1, "N < 100");
+    // if (N < 100) error(-1, "N < 100");
 
     vector<double> a(2 * N - 1);
     vector<double> b(2 * N);

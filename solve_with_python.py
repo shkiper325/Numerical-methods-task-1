@@ -78,6 +78,21 @@ def solve_with_penta():
 
     sol = pp.solve(M, f, is_flat=True, solver=1)
 
+    # mat = np.zeros(shape=(2 * N + 1, 2 * N + 1), dtype=np.float32)
+    # for i in range(2 * N - 1):
+    #     mat[i, i + 2] = a[i]
+    # for i in range(2 * N):
+    #     mat[i, i + 1] = b[i]
+    # for i in range(2 * N + 1):
+    #     mat[i, i] = c[i]
+    # for i in range(1, 2 * N):
+    #     mat[i, i - 1] = d[i]
+    # for i in range(2, 2 * N - 1):
+    #     mat[i, i - 2] = e[i]
+    # np.savetxt('tmp/mat.txt', mat, fmt='%10.5f  ')
+
+    # sol = np.linalg.solve(mat, f)
+
     return sol, N
 
 def exact_solution(x):
