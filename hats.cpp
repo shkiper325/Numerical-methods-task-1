@@ -9,8 +9,8 @@
 
 using namespace std;
 
-const double k1 = 1;
-const double k2 = 1.5;
+const double k1 = 1.5;
+const double k2 = 2;
 
 /*
     Функция, возвращяющая функцию, которая реализует
