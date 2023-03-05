@@ -96,7 +96,7 @@ def solve_with_penta_for_Liza():
 
     M = np.stack([a, b, c, d, e], axis = 0)
 
-    sol = pp.solve(M, f, is_flat=True, solver=1)
+    sol = pp.solve(M, f, is_flat=True, solver=2)
 
     # mat = np.zeros(shape=(2 * N + 1, 2 * N + 1), dtype=np.float32)
     # for i in range(2 * N - 1):
@@ -126,13 +126,16 @@ def main():
 
     result = []
     errors = []
+    l2_errors = []
     for i in range(N + 1):
         x = i / N
 
         result.append(eval_result(x, sol))
         errors.append(np.abs(eval_result(x, sol) - exact_solution(x)))
+        l2_errors.append((eval_result(x, sol) - exact_solution(x)) ** 2)
     
-    print('Max error:', np.amax(errors))
+    print('C-dist:', np.amax(errors))
+    print('L2-dist:', np.sqrt(np.sum(l2_errors) / N))
 
     json_to_write = json.dumps({
         'x' : [i / N for i in range(N + 1)],
