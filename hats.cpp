@@ -135,6 +135,8 @@ vector<double> gen_f(int N, int point_count, std::function<double(double)> f) {
         double a = static_cast<double>(k / 2 - 1) / N + (k % 2 == 0 ? 0. : 1. / N);
         double b = static_cast<double>(k / 2 + 1) / N;
 
+        // ret[k] = (poly_hat(k, N) * PolyWithSupp(Poly({0, 1}), 0, N, N)).integrate(false);
+
         auto hat = functional_hat(k, N);
         auto multilpied = [hat = hat, f = f](double x) -> double {
             return hat(x) * f(x);

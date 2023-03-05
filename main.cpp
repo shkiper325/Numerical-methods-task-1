@@ -33,7 +33,7 @@ void dump_vec(vector<double> vec, string path) {
     auto m = vec.size();
 
     for (int i = 0; i < m; ++i) {
-        fprintf(fd, "%30.20e\n", vec[i]);
+        fprintf(fd, "%60.30e\n", vec[i]);
     }
 
     fclose(fd);
