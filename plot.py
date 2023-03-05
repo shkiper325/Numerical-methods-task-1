@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 
+plt.rcParams.update({'font.size': 30})
+
 def main():
     fd = open('tmp/points.json', 'r')
     text = fd.read()
@@ -21,7 +23,7 @@ def main():
     plt.plot(parsed['x'], parsed['y_target'], color='orange')
 
     plt.xlabel('x')
-    plt.ylabel('y')
+    plt.ylabel('u')
 
     plt.savefig('plot.png')
 
